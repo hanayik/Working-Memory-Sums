@@ -72,10 +72,12 @@ try
             [responseKey, rt] = showNumber(params, thisNumber, presTime, respTime);
             if trialTypes(c) == 1
                 correctResp = '1!';
+                correctRespAlt = '1';
             else
                 correctResp = '2@';
+                correctRespAlt = '2';
             end
-            if strcmpi(responseKey, correctResp)
+            if strcmpi(responseKey, correctResp) || strcmpi(responseKey, correctRespAlt)
                 acc = 1;
             else
                 acc = 0;
