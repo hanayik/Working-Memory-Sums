@@ -96,22 +96,23 @@ try
         end
         WaitSecs(gapTime/1000);
         if i == 60
-            DrawFormattedText(params.win, 'You can take a break. Press the ''1'' key to start again.','center','center');
-            Screen('Flip',params.win);
-            KbWait(-1);
-            Screen('Flip',params.win);
-            WaitSecs(1);
+            DrawFormattedText(params.win, 'You can take a break. Press the space bar to 
         end
     end
     Screen('Preference', 'VisualDebugLevel', oldLevel);
     CleanUp();
+    save_to_base(1);
     WaitSecs(1);
     
 catch catcherror
+    save_to_base(1);
     CleanUp();
 end
 end
 %sub functions below
+
+
+
 
 
 
