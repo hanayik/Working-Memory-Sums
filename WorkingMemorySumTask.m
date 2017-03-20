@@ -131,6 +131,7 @@ end
 
 function [responseKey, rt] = showNumber(params, number, presTime, respTime)
 % draw the number to screen
+Screen('TextSize', params.win, 72);
 DrawFormattedText(params.win, num2str(number), 'center', 'center',params.TextColor);
 tOnset = Screen('Flip',params.win);
 
