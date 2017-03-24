@@ -58,7 +58,8 @@ try
         if i == 1
             thisNumber = randi([1,9]);
             lastNumber = thisNumber;
-            showNumber(params, thisNumber, presTime, 0);
+            numberOn = GetSecs;
+            showNumber(params, thisNumber, presTime, respTime);
         else
             c = c+1;
             if trialTypes(c)
@@ -68,7 +69,7 @@ try
                 lastNumber = thisNumber;
                 thisNumber = randi([1,9]);
             end
-            
+            numberOn = GetSecs;
             [responseKey, rt] = showNumber(params, thisNumber, presTime, respTime);
             if trialTypes(c) == 1
                 correctResp = '1!';
@@ -94,7 +95,7 @@ try
             T.RT{c,1} = rt;
             writetable(T, datafile);
         end
-        WaitSecs(gapTime/1000);
+        WaitSecs('UntilTime',numberOn + (gapTime/1000) + (respTime/1000));
         if i == 60
             DrawFormattedText(params.win, 'You can take a break. Press the ''1'' key to start again.','center','center');
             Screen('Flip',params.win);
@@ -129,15 +130,15 @@ end
 
 
 
-function [responseKey, rt] = showNumber(params, number, presTime, respTime)
+    function [responseKey, rt] = showNumber(params, number, presTime, respTime)
 % draw the number to screen
 Screen('TextSize', params.win, 72);
 DrawFormattedText(params.win, num2str(number), 'center', 'center',params.TextColor);
 tOnset = Screen('Flip',params.win);
 
 %wait for presentation duration then remove
-WaitSecs(presTime/1000);
-tOffset = Screen('Flip',params.win);
+% WaitSecs(presTime/1000);
+% tOffset = Screen('Flip',params.win);
 
 keyIsPressed = 0;
 keyPressedTime = 0; %#ok
@@ -146,6 +147,12 @@ rt = 999;
 elapsedTime = 0;
 
 while ~keyIsPressed && elapsedTime <= respTime
+    if elapsedTime < presTime
+        DrawFormattedText(params.win, num2str(number), 'center', 'center',params.TextColor);
+        Screen('Flip',params.win);
+    else
+        Screen('Flip',params.win);
+    end
     [keyIsPressed, keyPressedTime, keyCode] = KbCheck(-1);
     if keyIsPressed
         responseKey = KbName(keyCode);
@@ -509,9 +516,9 @@ subj = [];
 runnum = [];
 doVideoRecord = [];
 prompt={'Participant: ','Session: ', 'Presentation time ms: ', 'Gap time ms: ', 'Response time ms: '};
-name='OddOrEven';
+name='Working Memory';
 numlines=1;
-defaultanswer={'0','0','600', '1500', '1500'};
+defaultanswer={'0','0','600', '0', '1500'};
 
 answer=inputdlg(prompt,name,numlines,defaultanswer);
 if isempty(answer); return; end
